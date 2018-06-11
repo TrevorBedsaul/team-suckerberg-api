@@ -2,6 +2,7 @@ import { repository } from "@loopback/repository";
 import { post, get, requestBody, HttpErrors } from "@loopback/rest";
 import { UserRepository } from "../repositories/user.repository";
 import { User } from "../models/user";
+import { sign, verify } from "jsonwebtoken";
 
 export class LoginController {
 
@@ -10,7 +11,7 @@ export class LoginController {
   ) { }
 
   @post('/login')
-  async loginUser(@requestBody() user: User): Promise<User> {
+  async loginUser(@requestBody() user: User): Promise<any> {
     // Check that email and password are both supplied
     if (!user.email || !user.password) {
       throw new HttpErrors.Unauthorized('invalid credentials');
@@ -28,7 +29,7 @@ export class LoginController {
       throw new HttpErrors.Unauthorized('invalid credentials');
     }
 
-    return await this.userRepo.findOne({
+    var user = await this.userRepo.findOne({
       where: {
         and: [
           { email: user.email },
@@ -36,5 +37,24 @@ export class LoginController {
         ],
       },
     });
+    
+    var jwt = sign(
+      {
+        user: {
+          id: user.id,
+          firstname: user.firstname,
+          lastname: user.lastname,
+          email: user.email
+        }
+      },
+      'secret-key', 
+      {
+        issuer: 'auth.ix.co.za',
+        audience: 'ix.co.za'
+      }
+    );
+    return {
+      token: jwt
+    };
   }
 }
