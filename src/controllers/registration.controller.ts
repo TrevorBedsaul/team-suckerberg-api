@@ -2,6 +2,9 @@ import { repository } from "@loopback/repository";
 import { UserRepository } from "../repositories/user.repository";
 import { post, get, requestBody } from "@loopback/rest";
 import { User } from "../models/user";
+import * as bcrypt from 'bcrypt';
+
+
 export class RegistrationController {
 
     constructor(
@@ -10,7 +13,17 @@ export class RegistrationController {
 
     @post('/registration')
     async createUser(@requestBody() user: User) {
-        return await this.userRepo.create(user);
+
+        let hashedPassword = await bcrypt.hash(user.password, 10);
+        
+        var newUser = new User();
+        newUser.firstname = user.firstname;
+        newUser.lastname = user.lastname;
+        newUser.email = user.email;
+        newUser.id = user.id;
+        newUser.password = hashedPassword;
+
+        return await this.userRepo.create(newUser);
     }
 
 }

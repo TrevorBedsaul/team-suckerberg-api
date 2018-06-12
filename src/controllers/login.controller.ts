@@ -3,6 +3,7 @@ import { post, get, requestBody, HttpErrors } from "@loopback/rest";
 import { UserRepository } from "../repositories/user.repository";
 import { User } from "../models/user";
 import { sign, verify } from "jsonwebtoken";
+import * as bcrypt from 'bcrypt';
 
 export class LoginController {
 
@@ -17,6 +18,7 @@ export class LoginController {
       throw new HttpErrors.Unauthorized('invalid credentials');
     }
 
+    user.password = await bcrypt.hash(user.password, 10);
     // Check that email and password are valid
     let userExists: boolean = !!(await this.userRepo.count({
       and: [
