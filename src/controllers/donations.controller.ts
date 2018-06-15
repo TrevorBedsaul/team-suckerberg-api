@@ -3,17 +3,20 @@ import { request } from "http";
 import { UserRepository } from "../repositories/user.repository";
 import { DonationRepository } from "../repositories/donation.repository";
 import { CharityRepository } from "../repositories/charity.repository";
+import { PortfolioRepository } from "../repositories/portfolio-map.repository";
 import { post, get, requestBody, param, HttpErrors } from "@loopback/rest";
 import { User } from "../models/user";
 import { Charity } from "../models/charity";
 import { Donation } from "../models/donation";
+import { PortfolioMap } from "../models/portfolio-map";
 
 export class DonationsController {
 
     constructor(
         @repository(DonationRepository) private userRepo: UserRepository,
         @repository(CharityRepository) private charityRepo: CharityRepository,
-        @repository(DonationRepository) private donationRepo: DonationRepository
+        @repository(DonationRepository) private donationRepo: DonationRepository,
+        @repository(PortfolioRepository) private portfolioRepo: PortfolioRepository
     ) { }
 
     @post('/donations')
@@ -31,5 +34,21 @@ export class DonationsController {
         }
 
         return await this.donationRepo.create(donation);
+    }
+
+    @get('/portfolio/{id}')
+    async getPortfolio(@param.path.number('user_id') user_id: number): Promise<Array<Charity>>{  
+        var charities = Array<Charity>();
+        var portMap = await this.portfolioRepo.find({
+            where:
+            {
+                user_id: user_id,
+            }
+        });
+
+        portMap.forEach(element => {
+            //charities.push(this.charityRepo.findById(element.charity_id));
+        });
+        return charities;
     }
 }

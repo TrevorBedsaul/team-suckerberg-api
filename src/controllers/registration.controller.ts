@@ -15,7 +15,7 @@ export class RegistrationController {
     async createUser(@requestBody() user: User) {
 
         let hashedPassword = await bcrypt.hash(user.password, 10);
-        
+
         var newUser = new User();
         newUser.firstname = user.firstname;
         newUser.lastname = user.lastname;
@@ -23,7 +23,11 @@ export class RegistrationController {
         newUser.id = user.id;
         newUser.password = hashedPassword;
 
-        return await this.userRepo.create(newUser);
+        await this.userRepo.create(newUser);
+
+        var otherUser = newUser;
+        otherUser.password = "";
+        return otherUser;
     }
 
 }

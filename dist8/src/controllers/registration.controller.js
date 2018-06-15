@@ -16,12 +16,23 @@ const repository_1 = require("@loopback/repository");
 const user_repository_1 = require("../repositories/user.repository");
 const rest_1 = require("@loopback/rest");
 const user_1 = require("../models/user");
+const bcrypt = require("bcrypt");
 let RegistrationController = class RegistrationController {
     constructor(userRepo) {
         this.userRepo = userRepo;
     }
     async createUser(user) {
-        return await this.userRepo.create(user);
+        let hashedPassword = await bcrypt.hash(user.password, 10);
+        var newUser = new user_1.User();
+        newUser.firstname = user.firstname;
+        newUser.lastname = user.lastname;
+        newUser.email = user.email;
+        newUser.id = user.id;
+        newUser.password = hashedPassword;
+        await this.userRepo.create(newUser);
+        var otherUser = newUser;
+        otherUser.password = "";
+        return otherUser;
     }
 };
 __decorate([

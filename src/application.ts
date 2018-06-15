@@ -1,10 +1,10 @@
-import {ApplicationConfig} from '@loopback/core';
-import {RestApplication, RestServer, RestBindings} from '@loopback/rest';
-import {MySequence} from './sequence';
+import { ApplicationConfig } from '@loopback/core';
+import { RestApplication, RestServer, RestBindings } from '@loopback/rest';
+import { MySequence } from './sequence';
 
 /* tslint:disable:no-unused-variable */
 // Binding and Booter imports are required to infer types for BootMixin!
-import {BootMixin, Booter, Binding} from '@loopback/boot';
+import { BootMixin, Booter, Binding } from '@loopback/boot';
 import {
   Class,
   Repository,
@@ -33,14 +33,28 @@ export class GoldenApiApplication extends BootMixin(
       },
     };
 
+    var environment = process.env.NODE_ENV;
+    var databaseName = 'golden-thread'
+    var databaseUsername = 'root';
+    var databasePassword = '3026266tb';
+
+    if (environment == "trevor") {
+      databaseName = 'golden_thread';
+      databaseUsername = 'root';
+      databasePassword = '3026266tb';
+    }
+
+    console.log("environment: ", environment);
+    console.log("database name: ", databaseName);
+
     var dataSourceConfig = new juggler.DataSource({
       name: "db",
       connector: "loopback-connector-mysql",
       host: 'localhost',
       port: 3306,
-      database: 'golden_thread',
-      user: 'root',
-      password: '3026266tb'
+      database: databaseName,
+      user: databaseUsername,
+      password: databasePassword
     });
     this.dataSource(dataSourceConfig);
   }

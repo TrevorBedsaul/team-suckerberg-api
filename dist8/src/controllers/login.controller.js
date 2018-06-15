@@ -26,6 +26,7 @@ let LoginController = class LoginController {
         if (!user.email || !user.password) {
             throw new rest_1.HttpErrors.Unauthorized('invalid credentials');
         }
+        //user.password = await bcrypt.hash(user.password, 10);
         // Check that email and password are valid
         let userExists = !!(await this.userRepo.count({
             and: [

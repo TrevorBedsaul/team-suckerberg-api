@@ -8,7 +8,7 @@ import * as bcrypt from 'bcrypt';
 export class LoginController {
 
   constructor(
-    @repository(UserRepository) private userRepo: UserRepository
+    @repository(UserRepository) private userRepo: UserRepository 
   ) { }
 
   @post('/login')
@@ -18,7 +18,7 @@ export class LoginController {
       throw new HttpErrors.Unauthorized('invalid credentials');
     }
 
-    user.password = await bcrypt.hash(user.password, 10);
+    //user.password = await bcrypt.hash(user.password, 10);
     // Check that email and password are valid
     let userExists: boolean = !!(await this.userRepo.count({
       and: [

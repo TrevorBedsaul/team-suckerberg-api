@@ -33,6 +33,8 @@ export class CharitiesController {
         }
     }
 
+    
+
     @get('/charities/{id}/projects')
     async getAllCharityProjects(@param.path.number('id') id: number): Promise<Array<Project>> {
         return await this.projectRepo.find();
