@@ -33,14 +33,19 @@ class GoldenApiApplication extends boot_1.BootMixin(repository_1.RepositoryMixin
         }
         console.log("environment: ", environment);
         console.log("database name: ", databaseName);
+        // var dataSourceConfig = new juggler.DataSource({
+        //   name: "db",
+        //   connector: "loopback-connector-mysql",
+        //   host: 'localhost',
+        //   port: 3306,
+        //   database: databaseName,
+        //   user: databaseUsername,
+        //   password: databasePassword
+        // });
+        // this.dataSource(dataSourceConfig);
         var dataSourceConfig = new repository_1.juggler.DataSource({
             name: "db",
-            connector: "loopback-connector-mysql",
-            host: 'localhost',
-            port: 3306,
-            database: databaseName,
-            user: databaseUsername,
-            password: databasePassword
+            connector: "memory"
         });
         this.dataSource(dataSourceConfig);
     }
