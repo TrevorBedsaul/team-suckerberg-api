@@ -8,7 +8,7 @@ import * as bcrypt from 'bcrypt';
 export class LoginController {
 
   constructor(
-    @repository(UserRepository) private userRepo: UserRepository 
+    @repository(UserRepository) private userRepo: UserRepository
   ) { }
 
   @post('/login')
@@ -22,41 +22,46 @@ export class LoginController {
     // Check that email and password are valid
     let userExists: boolean = !!(await this.userRepo.count({
       and: [
-        { email: user.email },
-        { password: user.password },
+        { email: user.email }
       ],
     }));
 
     if (!userExists) {
-      throw new HttpErrors.Unauthorized('invalid credentials');
+      throw new HttpErrors.Unauthorized('user does not exist');
     }
 
-    var user = await this.userRepo.findOne({
-      where: {
-        and: [
-          { email: user.email },
-          { password: user.password }
-        ],
-      },
-    });
-    
-    var jwt = sign(
-      {
-        user: {
-          id: user.id,
-          firstname: user.firstname,
-          lastname: user.lastname,
-          email: user.email
-        }
-      },
-      'secret-key', 
-      {
-        issuer: 'auth.ix.co.za',
-        audience: 'ix.co.za'
+    // var user = await this.userRepo.findOne({
+    //   where: {
+    //     and: [
+    //       { email: user.email },
+    //       { password: user.password }
+    //     ],
+    //   },
+    // });
+    var userList = await this.userRepo.find();
+    for (var i = 0; i < userList.length; i++) {
+      var element = userList[i];
+      if (user.email == element.email && bcrypt.compare(element.password, user.password)) {
+
+        var jwt = sign(
+          {
+            user: {
+              id: user.id,
+              firstname: user.firstname,
+              lastname: user.lastname,
+              email: user.email
+            }
+          },
+          'secret-key',
+          {
+            issuer: 'auth.ix.co.za',
+            audience: 'ix.co.za'
+          }
+        );
+        return {
+          token: jwt
+        };
       }
-    );
-    return {
-      token: jwt
-    };
+    }
   }
 }

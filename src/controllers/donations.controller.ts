@@ -19,8 +19,8 @@ export class DonationsController {
         @repository(PortfolioRepository) private portfolioRepo: PortfolioRepository
     ) { }
 
-    @post('/donations')
-    async makeDonation(@requestBody() donation: Donation) {
+    @post('/donation')
+    async makeDonation(@requestBody() donation: Donation): Promise<Donation> {
         if (!(await this.userRepo.count({ id: donation.user_id }))) {
             throw new HttpErrors.Unauthorized('user does not exist');
         }
@@ -32,13 +32,14 @@ export class DonationsController {
         if( donation.amount <= 0 ) {
             throw new HttpErrors.Unauthorized('amount is less than or equal to 0');
         }
+        console.log("test");
 
         return await this.donationRepo.create(donation);
     }
 
     @get('/portfolio/{id}')
     async getPortfolio(@param.path.number('user_id') user_id: number): Promise<Array<Charity>>{  
-        var charities = Array<Charity>();
+        let charities = Array<any>();
         var portMap = await this.portfolioRepo.find({
             where:
             {
@@ -47,7 +48,8 @@ export class DonationsController {
         });
 
         portMap.forEach(element => {
-            //charities.push(this.charityRepo.findById(element.charity_id));
+            var temp = this.charityRepo.findById(element.charity_id);
+            charities.push(temp);
         });
         return charities;
     }

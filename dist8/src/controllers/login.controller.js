@@ -17,6 +17,7 @@ const rest_1 = require("@loopback/rest");
 const user_repository_1 = require("../repositories/user.repository");
 const user_1 = require("../models/user");
 const jsonwebtoken_1 = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 let LoginController = class LoginController {
     constructor(userRepo) {
         this.userRepo = userRepo;
@@ -30,35 +31,40 @@ let LoginController = class LoginController {
         // Check that email and password are valid
         let userExists = !!(await this.userRepo.count({
             and: [
-                { email: user.email },
-                { password: user.password },
+                { email: user.email }
             ],
         }));
         if (!userExists) {
-            throw new rest_1.HttpErrors.Unauthorized('invalid credentials');
+            throw new rest_1.HttpErrors.Unauthorized('user does not exist');
         }
-        var user = await this.userRepo.findOne({
-            where: {
-                and: [
-                    { email: user.email },
-                    { password: user.password }
-                ],
-            },
-        });
-        var jwt = jsonwebtoken_1.sign({
-            user: {
-                id: user.id,
-                firstname: user.firstname,
-                lastname: user.lastname,
-                email: user.email
+        // var user = await this.userRepo.findOne({
+        //   where: {
+        //     and: [
+        //       { email: user.email },
+        //       { password: user.password }
+        //     ],
+        //   },
+        // });
+        var userList = await this.userRepo.find();
+        for (var i = 0; i < userList.length; i++) {
+            var element = userList[i];
+            if (user.email == element.email && bcrypt.compare(element.password, user.password)) {
+                var jwt = jsonwebtoken_1.sign({
+                    user: {
+                        id: user.id,
+                        firstname: user.firstname,
+                        lastname: user.lastname,
+                        email: user.email
+                    }
+                }, 'secret-key', {
+                    issuer: 'auth.ix.co.za',
+                    audience: 'ix.co.za'
+                });
+                return {
+                    token: jwt
+                };
             }
-        }, 'secret-key', {
-            issuer: 'auth.ix.co.za',
-            audience: 'ix.co.za'
-        });
-        return {
-            token: jwt
-        };
+        }
     }
 };
 __decorate([

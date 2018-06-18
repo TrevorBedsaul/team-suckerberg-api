@@ -5,4 +5,5 @@ export declare class PaymentMethodsController {
     constructor(paymentMethodRepo: PaymentMethodRepository);
     getPaymentMethod(): Promise<Array<PaymentMethod>>;
     makePaymentMethod(payment_method: PaymentMethod): Promise<PaymentMethod>;
+    createStripePayment(token: string): Promise<any>;
 }

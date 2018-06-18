@@ -25,4 +25,17 @@ export class PaymentMethodsController {
     async makePaymentMethod(@requestBody() payment_method: PaymentMethod) {
         return await this.paymentMethodRepo.create(payment_method);
     }
+
+    @post('/stripepayment')
+    async createStripePayment(@requestBody() token: string) {
+        var stripe = require("stripe")("pk_test_eYCX11dIxALec8Sqz2JpIfip");
+        const charge = stripe.charges.create({
+            amount: 999,
+            currency: 'usd',
+            description: 'Test',
+            source: token,
+            metadata: { order_id: 6735 },
+        });
+        return charge;
+    }
 }

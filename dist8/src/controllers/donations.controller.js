@@ -36,23 +36,25 @@ let DonationsController = class DonationsController {
         if (donation.amount <= 0) {
             throw new rest_1.HttpErrors.Unauthorized('amount is less than or equal to 0');
         }
+        console.log("test");
         return await this.donationRepo.create(donation);
     }
     async getPortfolio(user_id) {
-        var charities = Array();
+        let charities = Array();
         var portMap = await this.portfolioRepo.find({
             where: {
                 user_id: user_id,
             }
         });
         portMap.forEach(element => {
-            //charities.push(this.charityRepo.findById(element.charity_id));
+            var temp = this.charityRepo.findById(element.charity_id);
+            charities.push(temp);
         });
         return charities;
     }
 };
 __decorate([
-    rest_1.post('/donations'),
+    rest_1.post('/donation'),
     __param(0, rest_1.requestBody()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [donation_1.Donation]),

@@ -27,6 +27,17 @@ let PaymentMethodsController = class PaymentMethodsController {
     async makePaymentMethod(payment_method) {
         return await this.paymentMethodRepo.create(payment_method);
     }
+    async createStripePayment(token) {
+        var stripe = require("stripe")("pk_test_eYCX11dIxALec8Sqz2JpIfip");
+        const charge = stripe.charges.create({
+            amount: 999,
+            currency: 'usd',
+            description: 'Test',
+            source: token,
+            metadata: { order_id: 6735 },
+        });
+        return charge;
+    }
 };
 __decorate([
     rest_1.get('/payment-methods'),
@@ -41,6 +52,13 @@ __decorate([
     __metadata("design:paramtypes", [payment_method_1.PaymentMethod]),
     __metadata("design:returntype", Promise)
 ], PaymentMethodsController.prototype, "makePaymentMethod", null);
+__decorate([
+    rest_1.post('/stripepayment'),
+    __param(0, rest_1.requestBody()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], PaymentMethodsController.prototype, "createStripePayment", null);
 PaymentMethodsController = __decorate([
     __param(0, repository_1.repository(donation_repository_1.DonationRepository)),
     __metadata("design:paramtypes", [payment_method_repository_1.PaymentMethodRepository])
