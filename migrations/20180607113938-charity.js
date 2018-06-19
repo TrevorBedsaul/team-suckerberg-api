@@ -18,21 +18,37 @@ exports.up = function (db, callback) {
   db.createTable('charity', {
     id: {
       type: 'int',
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     name: {
       type: 'string',
-      length: 50
+      length: 50,
+      notNull: true
     },
-    username: {
+    mission: {
       type: 'string',
-      length: 20
+      notNull: true
     },
-    password: {
+    category: {
       type: 'string',
-      length: 50
+      length: 50,
+      notNull: true
+    },
+    websiteUrl: {
+      type: 'string',
+      notNull: true
+    },
+    logUrl: {
+      type: 'string',
+      notNull: true
+    },
+    imageUrl: {
+      type: 'string',
+      notNull: true
     },
   }, callback);
+  
   return null;
 };
 

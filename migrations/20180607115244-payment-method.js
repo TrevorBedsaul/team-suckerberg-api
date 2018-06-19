@@ -18,7 +18,8 @@ exports.up = function (db, callback) {
   db.createTable('payment-method', {
     id: {
       type: 'int',
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     card_id: {
       type: 'int',

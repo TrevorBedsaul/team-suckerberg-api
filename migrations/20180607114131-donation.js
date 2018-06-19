@@ -18,16 +18,20 @@ exports.up = function (db, callback) {
   db.createTable('donation', {
     id: {
       type: 'int',
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     amount: {
-      type: 'int'
+      type: 'int',
+      notNull: true
     },
     charity_id: {
-      type: 'int'
+      type: 'int',
+      notNull: true
     },
     user_id: {
-      type: 'int'
+      type: 'int',
+      notNull: true
     },
   }, callback);
   return null;

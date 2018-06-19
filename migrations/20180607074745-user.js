@@ -19,23 +19,28 @@ exports.up = function (db, callback) {
     id: {
       type: 'int',
       autoIncrement: true,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     firstname: {
       type: 'string',
-      length: 40
+      length: 40,
+      notNull: true
     },
     lastname: {
       type: 'string',
-      length: 40
+      length: 40,
+      notNull: true
     },
     email: {
       type: 'string',
-      length: 50
+      length: 50,
+      uniqueIndex: true,
+      notNull: true
     },
     password: {
       type: 'string',
-      length: 50
+      notNull: true
     },
   }, callback);
   return null;

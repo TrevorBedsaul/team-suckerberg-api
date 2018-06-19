@@ -18,16 +18,20 @@ exports.up = function (db, callback) {
   db.createTable('portfolio-map', {
     id: {
       type: 'int',
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     percentage: {
       type: 'int',
+      notNull: true,
     },
     user_id: {
       type: 'int',
+      notNull: true
     },
     charity_id: {
       type: 'int',
+      notNull: true
     },
   }, callback);
   return null;
