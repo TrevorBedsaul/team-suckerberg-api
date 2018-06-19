@@ -6,6 +6,14 @@
         "password": "PRODUCTION_PASSWORD"
     },
 
+    "miki": {
+        "driver":"mysql",
+        "host":"ix-fs-1.ce5d5ftkvwyr.eu-west-1.rds.amazonaws.com",
+        "port":"3306",
+        "user": "ix_fs_1",
+        "password":"ixperience2018",
+        "database":"team_suckerberg"
+    },
     "dev": {
         "driver": "mysql",
         "host": "localhost",

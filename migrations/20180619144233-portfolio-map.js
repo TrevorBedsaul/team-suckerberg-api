@@ -15,34 +15,26 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db, callback) {
-  db.createTable('user', {
+  db.createTable('portfolio-map', {
     id: {
       type: 'int',
-      autoIncrement: true,
       primaryKey: true
     },
-    firstname: {
-      type: 'string',
-      length: 40
+    percentage: {
+      type: 'int',
     },
-    lastname: {
-      type: 'string',
-      length: 40
+    user_id: {
+      type: 'int',
     },
-    email: {
-      type: 'string',
-      length: 50
-    },
-    password: {
-      type: 'string',
-      length: 50
+    charity_id: {
+      type: 'int',
     },
   }, callback);
   return null;
 };
 
 exports.down = function (db, callback) {
-  db.dropTable('user');
+  db.dropTable('portfolio-map');
   return null;
 };
 
