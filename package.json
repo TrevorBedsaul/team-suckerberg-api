@@ -30,7 +30,8 @@
     "posttest": "npm run lint",
     "prestart": "npm run build:current",
     "start": "node .",
-    "prepublishOnly": "npm run test"
+    "prepublishOnly": "npm run test",
+    "trevor": "DATABASE_HOST=localhost DATABASE_NAME=golden_thread DATABASE_USERNAME=root DATABASE_PASSWORD=3026266tb npm start"
   },
   "repository": {
     "type": "git"

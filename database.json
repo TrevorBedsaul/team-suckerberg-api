@@ -1,4 +1,11 @@
 {
+    "defaultEnv": {"ENV": "NODE_ENV"},
+    "prod": {
+        "driver":"mysql",
+        "user": "PRODUCTION_USERNAME",
+        "password": "PRODUCTION_PASSWORD"
+    },
+
     "dev": {
         "driver": "mysql",
         "host": "localhost",
