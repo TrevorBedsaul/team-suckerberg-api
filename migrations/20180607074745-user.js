@@ -20,8 +20,7 @@ exports.up = function (db, callback) {
       type: 'int',
       autoIncrement: true,
       primaryKey: true,
-      autoIncrement: true
-    },
+     },
     firstname: {
       type: 'string',
       length: 40,
@@ -42,6 +41,9 @@ exports.up = function (db, callback) {
       type: 'string',
       notNull: true
     },
+    about_me: {
+      type: 'string',
+    }
   }, callback);
   return null;
 };

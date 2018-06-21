@@ -37,24 +37,17 @@ let LoginController = class LoginController {
         if (!userExists) {
             throw new rest_1.HttpErrors.Unauthorized('user does not exist');
         }
-        // var user = await this.userRepo.findOne({
-        //   where: {
-        //     and: [
-        //       { email: user.email },
-        //       { password: user.password }
-        //     ],
-        //   },
-        // });
         var userList = await this.userRepo.find();
         for (var i = 0; i < userList.length; i++) {
             var element = userList[i];
             if (user.email == element.email && bcrypt.compare(element.password, user.password)) {
+                console.log("USER: " + user.email);
                 var jwt = jsonwebtoken_1.sign({
                     user: {
-                        id: user.id,
-                        firstname: user.firstname,
-                        lastname: user.lastname,
-                        email: user.email
+                        id: element.id,
+                        firstname: element.firstname,
+                        lastname: element.lastname,
+                        email: element.email,
                     }
                 }, 'secret-key', {
                     issuer: 'auth.ix.co.za',

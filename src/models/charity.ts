@@ -20,14 +20,32 @@ export class Charity extends Entity {
         type: 'string',
         required: true
     })
-    username: string;
+    mission: string;
 
     @property({
         type: 'string',
         required: true
     })
-    password: string;
+    category: string;
 
+    @property({
+        type: 'string',
+        required: true
+    })
+    websiteUrl: string;
+
+    @property({
+        type: 'string',
+        required: true
+    })
+    logoUrl: string;
+
+    @property({
+        type: 'string',
+        required: true
+    })
+    imageUrl: string;
+    
     getId() {
         return this.id;
     }

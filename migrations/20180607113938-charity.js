@@ -39,7 +39,7 @@ exports.up = function (db, callback) {
       type: 'string',
       notNull: true
     },
-    logUrl: {
+    logoUrl: {
       type: 'string',
       notNull: true
     },
@@ -48,7 +48,6 @@ exports.up = function (db, callback) {
       notNull: true
     },
   }, callback);
-  
   return null;
 };
 

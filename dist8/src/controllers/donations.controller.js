@@ -19,6 +19,7 @@ const charity_repository_1 = require("../repositories/charity.repository");
 const portfolio_map_repository_1 = require("../repositories/portfolio-map.repository");
 const rest_1 = require("@loopback/rest");
 const donation_1 = require("../models/donation");
+const portfolio_map_1 = require("../models/portfolio-map");
 let DonationsController = class DonationsController {
     constructor(userRepo, charityRepo, donationRepo, portfolioRepo) {
         this.userRepo = userRepo;
@@ -28,6 +29,7 @@ let DonationsController = class DonationsController {
     }
     async makeDonation(donation) {
         if (!(await this.userRepo.count({ id: donation.user_id }))) {
+            console.log(donation.charity_id);
             throw new rest_1.HttpErrors.Unauthorized('user does not exist');
         }
         if (!(await this.charityRepo.count({ id: donation.charity_id }))) {
@@ -38,6 +40,8 @@ let DonationsController = class DonationsController {
         }
         console.log("test");
         return await this.donationRepo.create(donation);
+    }
+    async addToPortfolio(map) {
     }
     async getPortfolio(user_id) {
         let charities = Array();
@@ -61,6 +65,13 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], DonationsController.prototype, "makeDonation", null);
 __decorate([
+    rest_1.post('/portfolio'),
+    __param(0, rest_1.requestBody()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [portfolio_map_1.PortfolioMap]),
+    __metadata("design:returntype", Promise)
+], DonationsController.prototype, "addToPortfolio", null);
+__decorate([
     rest_1.get('/portfolio/{id}'),
     __param(0, rest_1.param.path.number('user_id')),
     __metadata("design:type", Function),
@@ -68,7 +79,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], DonationsController.prototype, "getPortfolio", null);
 DonationsController = __decorate([
-    __param(0, repository_1.repository(donation_repository_1.DonationRepository)),
+    __param(0, repository_1.repository(user_repository_1.UserRepository)),
     __param(1, repository_1.repository(charity_repository_1.CharityRepository)),
     __param(2, repository_1.repository(donation_repository_1.DonationRepository)),
     __param(3, repository_1.repository(portfolio_map_repository_1.PortfolioRepository)),

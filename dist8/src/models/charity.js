@@ -35,14 +35,35 @@ __decorate([
         required: true
     }),
     __metadata("design:type", String)
-], Charity.prototype, "username", void 0);
+], Charity.prototype, "mission", void 0);
 __decorate([
     repository_1.property({
         type: 'string',
         required: true
     }),
     __metadata("design:type", String)
-], Charity.prototype, "password", void 0);
+], Charity.prototype, "category", void 0);
+__decorate([
+    repository_1.property({
+        type: 'string',
+        required: true
+    }),
+    __metadata("design:type", String)
+], Charity.prototype, "websiteUrl", void 0);
+__decorate([
+    repository_1.property({
+        type: 'string',
+        required: true
+    }),
+    __metadata("design:type", String)
+], Charity.prototype, "logoUrl", void 0);
+__decorate([
+    repository_1.property({
+        type: 'string',
+        required: true
+    }),
+    __metadata("design:type", String)
+], Charity.prototype, "imageUrl", void 0);
 Charity = __decorate([
     repository_1.model({
         name: "charity"

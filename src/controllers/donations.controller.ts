@@ -13,7 +13,7 @@ import { PortfolioMap } from "../models/portfolio-map";
 export class DonationsController {
 
     constructor(
-        @repository(DonationRepository) private userRepo: UserRepository,
+        @repository(UserRepository) private userRepo: UserRepository,
         @repository(CharityRepository) private charityRepo: CharityRepository,
         @repository(DonationRepository) private donationRepo: DonationRepository,
         @repository(PortfolioRepository) private portfolioRepo: PortfolioRepository
@@ -22,6 +22,7 @@ export class DonationsController {
     @post('/donation')
     async makeDonation(@requestBody() donation: Donation): Promise<Donation> {
         if (!(await this.userRepo.count({ id: donation.user_id }))) {
+            console.log(donation.charity_id);
             throw new HttpErrors.Unauthorized('user does not exist');
         }
 
@@ -29,7 +30,7 @@ export class DonationsController {
             throw new HttpErrors.Unauthorized('charity does not exist');
         }
 
-        if( donation.amount <= 0 ) {
+        if (donation.amount <= 0) {
             throw new HttpErrors.Unauthorized('amount is less than or equal to 0');
         }
         console.log("test");
@@ -37,14 +38,19 @@ export class DonationsController {
         return await this.donationRepo.create(donation);
     }
 
+    @post('/portfolio')
+    async addToPortfolio(@requestBody() map: PortfolioMap) {
+
+    }
+
     @get('/portfolio/{id}')
-    async getPortfolio(@param.path.number('user_id') user_id: number): Promise<Array<Charity>>{  
+    async getPortfolio(@param.path.number('user_id') user_id: number): Promise<Array<Charity>> {
         let charities = Array<any>();
         var portMap = await this.portfolioRepo.find({
             where:
-            {
-                user_id: user_id,
-            }
+                {
+                    user_id: user_id,
+                }
         });
 
         portMap.forEach(element => {
