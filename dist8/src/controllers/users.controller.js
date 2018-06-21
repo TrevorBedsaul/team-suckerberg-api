@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const repository_1 = require("@loopback/repository");
 const user_repository_1 = require("../repositories/user.repository");
 const rest_1 = require("@loopback/rest");
+const user_1 = require("../models/user");
 const jsonwebtoken_1 = require("jsonwebtoken");
 let UsersController = class UsersController {
     constructor(userRepo) {
@@ -57,6 +58,10 @@ let UsersController = class UsersController {
             throw new rest_1.HttpErrors.Unauthorized('user does not exist');
         }
     }
+    async updateUser(id, user) {
+        id = +id;
+        return await this.userRepo.updateById(id, user);
+    }
 };
 __decorate([
     rest_1.get('/users'),
@@ -85,6 +90,14 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getUserByEmail", null);
+__decorate([
+    rest_1.patch('/users/{id}'),
+    __param(0, rest_1.param.path.number('id')),
+    __param(1, rest_1.requestBody()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, user_1.User]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "updateUser", null);
 UsersController = __decorate([
     __param(0, repository_1.repository(user_repository_1.UserRepository)),
     __metadata("design:paramtypes", [user_repository_1.UserRepository])

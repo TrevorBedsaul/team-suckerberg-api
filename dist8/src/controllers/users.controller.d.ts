@@ -7,4 +7,5 @@ export declare class UsersController {
     getUserByKey(token: any): Promise<any>;
     getUserByID(id: number): Promise<User>;
     getUserByEmail(email: string): Promise<User>;
+    updateUser(id: number, user: User): Promise<boolean>;
 }

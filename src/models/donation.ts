@@ -15,13 +15,13 @@ export class Donation extends Entity {
         type: 'number',
         required: true
     })
-    amount: number;
+    user_id: number;
 
     @property({
         type: 'number',
         required: true
     })
-    user_id: number;
+    amount: number;
 
     @property({
         type: 'number',

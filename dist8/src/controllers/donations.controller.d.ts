@@ -11,7 +11,10 @@ export declare class DonationsController {
     private donationRepo;
     private portfolioRepo;
     constructor(userRepo: UserRepository, charityRepo: CharityRepository, donationRepo: DonationRepository, portfolioRepo: PortfolioRepository);
+    getDonations(user_id: number): Promise<Array<Donation>>;
     makeDonation(donation: Donation): Promise<Donation>;
-    addToPortfolio(map: PortfolioMap): Promise<void>;
+    addToPortfolio(map: PortfolioMap): Promise<PortfolioMap>;
     getPortfolio(user_id: number): Promise<Array<Charity>>;
+    deleteCharityFromPortfolio(id: number): Promise<boolean>;
+    updatePortfolio(id: number, map: PortfolioMap): Promise<boolean>;
 }

@@ -27,6 +27,13 @@ let DonationsController = class DonationsController {
         this.donationRepo = donationRepo;
         this.portfolioRepo = portfolioRepo;
     }
+    async getDonations(user_id) {
+        return await this.donationRepo.find({
+            where: {
+                user_id: user_id
+            }
+        });
+    }
     async makeDonation(donation) {
         if (!(await this.userRepo.count({ id: donation.user_id }))) {
             console.log(donation.charity_id);
@@ -42,21 +49,45 @@ let DonationsController = class DonationsController {
         return await this.donationRepo.create(donation);
     }
     async addToPortfolio(map) {
+        if (!(await this.userRepo.count({ id: map.user_id }))) {
+            throw new rest_1.HttpErrors.Unauthorized('user does not exist');
+        }
+        if (!(await this.charityRepo.count({ id: map.charity_id }))) {
+            throw new rest_1.HttpErrors.Unauthorized('charity does not exist');
+        }
+        return await this.portfolioRepo.create(map);
     }
     async getPortfolio(user_id) {
-        let charities = Array();
+        var charities = Array();
         var portMap = await this.portfolioRepo.find({
             where: {
                 user_id: user_id,
             }
         });
-        portMap.forEach(element => {
-            var temp = this.charityRepo.findById(element.charity_id);
-            charities.push(temp);
-        });
+        for (var i = 0; i < portMap.length; i++) {
+            charities.push(await this.charityRepo.findById(portMap[i].charity_id));
+        }
         return charities;
     }
+    async deleteCharityFromPortfolio(id) {
+        let charityExists = !!(await this.portfolioRepo.count({ id }));
+        if (!charityExists) {
+            throw new rest_1.HttpErrors.BadRequest(`portfolio ID ${id} does not exist`);
+        }
+        return await this.portfolioRepo.deleteById(id);
+    }
+    async updatePortfolio(id, map) {
+        id = +id;
+        return await this.portfolioRepo.updateById(id, map);
+    }
 };
+__decorate([
+    rest_1.get('/donations/{id}'),
+    __param(0, rest_1.param.path.number('user_id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], DonationsController.prototype, "getDonations", null);
 __decorate([
     rest_1.post('/donation'),
     __param(0, rest_1.requestBody()),
@@ -78,6 +109,21 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], DonationsController.prototype, "getPortfolio", null);
+__decorate([
+    rest_1.del('/portfolio/{id}'),
+    __param(0, rest_1.param.path.number('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], DonationsController.prototype, "deleteCharityFromPortfolio", null);
+__decorate([
+    rest_1.patch('/portfolio/{id}'),
+    __param(0, rest_1.param.path.number('id')),
+    __param(1, rest_1.requestBody()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, portfolio_map_1.PortfolioMap]),
+    __metadata("design:returntype", Promise)
+], DonationsController.prototype, "updatePortfolio", null);
 DonationsController = __decorate([
     __param(0, repository_1.repository(user_repository_1.UserRepository)),
     __param(1, repository_1.repository(charity_repository_1.CharityRepository)),

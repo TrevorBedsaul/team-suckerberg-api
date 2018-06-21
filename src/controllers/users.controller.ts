@@ -1,6 +1,6 @@
 import { repository } from "@loopback/repository";
 import { UserRepository } from "../repositories/user.repository";
-import { post, get, requestBody, param, HttpErrors } from "@loopback/rest";
+import { post, get, requestBody, param, HttpErrors, patch } from "@loopback/rest";
 import { User } from "../models/user";
 import { request } from "http";
 import { verify } from "jsonwebtoken";
@@ -17,12 +17,12 @@ export class UsersController {
   }
 
   @get('/user/token')
-  async getUserByKey(@param.query.string('token') token:any ): Promise<any> {
+  async getUserByKey(@param.query.string('token') token: any): Promise<any> {
     if (!token) {
       throw new HttpErrors.Unauthorized(`Need a token`);
     }
-    try{
-      var jwtBody = verify(token,'secret-key');;
+    try {
+      var jwtBody = verify(token, 'secret-key');;
       return jwtBody;
     }
     catch (err) {
@@ -54,5 +54,14 @@ export class UsersController {
     catch{
       throw new HttpErrors.Unauthorized('user does not exist');
     }
+  }
+
+  @patch('/users/{id}')
+  async updateUser(
+    @param.path.number('id') id: number,
+    @requestBody() user: User,
+  ): Promise<boolean> {
+    id = +id;
+    return await this.userRepo.updateById(id, user);
   }
 }
